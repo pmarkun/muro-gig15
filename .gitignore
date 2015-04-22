@@ -1,0 +1,5 @@
+cache/*
+*.json
+*.pyc
+settings.py
+
