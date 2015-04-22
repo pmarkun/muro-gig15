@@ -184,13 +184,13 @@ class Youtube:
             
 
 def rockndroll():
-    tag = 'love'
-    #flickr = Flickr(tag, settings.config['flickr_apikey']).getPictures()
+    tag = settings.config['tag']
+    flickr = Flickr(tag, settings.config['flickr_apikey']).getPictures()
     twitter = Twitter(tag, settings.config['twitter_apikey'], settings.config['twitter_secret']).getPictures()
-    #instagram = Instagram(tag, settings.config['instagram_apikey']).getPictures()
+    instagram = Instagram(tag, settings.config['instagram_apikey']).getPictures()
     picasa = Picasa(tag).getPictures()
     youtube = Youtube(tag).getVideos()
-    lista_de_fotos =  twitter + flickr + picasa + youtube
+    lista_de_fotos =  instagram +  flickr + picasa + youtube
     lista_de_fotos = sorted(lista_de_fotos, key=itemgetter('date_posted'), reverse=True)
     a = open('muro.json','w')
     a.write(json.dumps(lista_de_fotos))

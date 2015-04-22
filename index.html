@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8" />
-	<title>Cobertura Colaborativa - BAIXOCENTRO</title>
+	<title>Muro - {{TITULO}}</title>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script type="text/javascript" src="js/shadowbox/shadowbox.js"></script>
 	<script type="text/javascript" src="js/jquery.imagesloaded.min.js"></script>
@@ -16,7 +16,7 @@
 	<script type="text/javascript">
 		jQuery(document).ready(function($) {
 
-			var jsonUrl = 'baixocentro.json';
+			var jsonUrl = 'muro.json';
 
 			$('section#main').hide();
 			$('body').append('<div class="loading">carregando...</div>');
@@ -49,7 +49,7 @@
 						if(i >= moreFrom && item.content) {
 
 							if(item.media_type == 'image')
-								var $item = $('<li id="item-' + i + '" class="item media image ' + item.date_posted + '"><a class="image-link" href="' + item.content + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.content + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>');
+								var $item = $('<li id="item-' + i + '" class="item media image ' + item.date_posted + '"><a class="image-link" href="' + item.content + '" rel="shadowbox[muro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.content + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>');
 							else if(item.media_type == 'video')
 								var $item = $('<li id="item-' + i + '" class="item media video ' + item.date_posted + '"><object width="490" height="275"><param name="movie" value="' + item.content + '"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><param name="wmode" value="transparent"></param><embed src="' + item.content + '" type="application/x-shockwave-flash" width="490" height="275" allowscriptaccess="always" allowfullscreen="true"></embed></object><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>');
 							else if(item.media_type == 'text')
@@ -62,7 +62,7 @@
 
 							$('#main.wall ul.content').imagesLoaded(function() {
 								Shadowbox.setup($(this).find('a.image-link'), {
-									gallery: 'baixocentro-' + reloadCount
+									gallery: 'muro-' + reloadCount
 								});
 								$item.show();
 								$('#main.wall ul.content').masonry('reload');
@@ -84,7 +84,7 @@
 				});
 
 				Shadowbox.setup('a.image-link', {
-					gallery: 'baixocentro-' + reloadCount
+					gallery: 'muro-' + reloadCount
 				});
 
 				//masonry
@@ -133,7 +133,7 @@
 					$('a.more').data('from', 20);
 
 					Shadowbox.setup('a.image-link', {
-						gallery: 'baixocentro-' + reloadCount
+						gallery: 'muro-' + reloadCount
 					});
 
 					var dataLimit = data.length;
@@ -151,7 +151,7 @@
 		function generateContent(i, item) {
 			if(item.content) {
 				if(item.media_type == 'image')
-					$('<li id="item-' + i + '" class="item media image ' + item.date_posted + '"><a class="image-link" href="' + item.content + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.content + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');
+					$('<li id="item-' + i + '" class="item media image ' + item.date_posted + '"><a class="image-link" href="' + item.content + '" rel="shadowbox[muro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.content + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');
 				else if(item.media_type == 'video')
 					$('<li id="item-' + i + '" class="item media video ' + item.date_posted + '"><object width="490" height="275"><param name="movie" value="' + item.content + '"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><param name="wmode" value="transparent"></param><embed src="' + item.content + '" type="application/x-shockwave-flash" width="490" height="275" allowscriptaccess="always" allowfullscreen="true"></embed></object></iframe><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');
 				else if(item.media_type == 'text')
@@ -165,19 +165,17 @@
 		<ul class="content">
 			<li class="item head">
 				<header>
-					<h1>BaixoCentro</h1>	
+					<h1>{{TITULO}}</h1>	
 					<h2>Cobertura Colaborativa</h2>
 					<a href="#" class="reload">recarregar resultados</a>
 				</header>
 			</li>
 			<li class="item info">
 				<nav>
-					<a href="http://baixocentro.org/" target="_blank">Site oficial do BaixoCentro</a>
-					<a href="http://programacao.baixocentro.org/" target="_blank">Programação completa</a>
-					<a href="http://baixocentro.org/" target="_blank">Mais informações sobre a cobertura</a>
+					<a href="http://github.com/pmarkun/muro/" target="_blank">Muro</a>
 				</nav>
 				<aside id="info">
-					<h3>Utilize a tag baixocentro e participe da cobertura!</h3>
+					<h3>Utilize a tag {{TAG}} e participe da cobertura!</h3>
 				</aside>
 			</li>
 		</ul>
