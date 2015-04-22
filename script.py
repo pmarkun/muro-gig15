@@ -1,4 +1,6 @@
 import json, urllib, datetime, time, os,sys
+from birdy import twitter
+from pprint import pprint
 from operator import itemgetter
 import settings
 
@@ -46,32 +48,34 @@ class Media:
         return 1000 * time.mktime(dt.timetuple())
         
 class Twitter:
-    def __init__(self, tag, api_key):
+    def __init__(self, tag, api_key, api_secret):
         self.name   = 'Twitter'
-        self.api_url = 'http://search.twitter.com/search.json?q=' + tag + '&rpp=100&include_entities=true&result_type=recent'
+        self.api_url = 'https://api.twitter.com/1.1/search/tweets.json?q=' + tag + ' filter:images&count=100&include_entities=true&result_type=recent'
         self.tag = tag
         self.api_key = api_key
+        self.secret = api_secret
         
     def getPictures(self):
         print 'Getting ' + self.name
         print self.api_url
+        client = twitter.AppClient(self.api_key, self.secret)
+        self.access_token = client.get_access_token()
+        client = twitter.AppClient(self.api_key, self.secret, self.access_token)
         pictures = []
-        for i in range(1,6): #pega 500 results
-            soap = urllib.urlopen(self.api_url + '&page=' + str(i))
-            soap = json.load(soap)
-            for raw_imagem in soap['results']:
-                if raw_imagem.has_key('entities') and raw_imagem['entities'].has_key('media'):
-                    imagem = Media()
-                    imagem.media_type = 'image'
-                    imagem.media_provider = self.name.lower()
-                    imagem.content = raw_imagem['entities']['media'][0]['media_url']
-                    imagem.thumb = raw_imagem['entities']['media'][0]['media_url']
-                    imagem.author = raw_imagem['from_user']
-                    imagem.width = raw_imagem['entities']['media'][0]['sizes']['orig']['w']
-                    imagem.height = raw_imagem['entities']['media'][0]['sizes']['orig']['h']
-                    imagem.date_posted = imagem.timestamp(datetime.datetime.strptime(raw_imagem['created_at'], "%a, %d %b %Y %H:%M:%S +0000"))
-                    imagem.original_url = raw_imagem['entities']['media'][0]['expanded_url']
-                    pictures.append(imagem.dictit())
+        soap = client.make_api_call('GET', self.api_url).json()
+        for raw_imagem in soap['statuses']:
+            if raw_imagem.has_key('entities') and raw_imagem['entities'].has_key('media'):    
+                imagem = Media()
+                imagem.media_type = 'image'
+                imagem.media_provider = self.name.lower()
+                imagem.content = raw_imagem['entities']['media'][0]['media_url']
+                imagem.thumb = raw_imagem['entities']['media'][0]['media_url']
+                imagem.author = raw_imagem['user']['name']
+                imagem.width = raw_imagem['entities']['media'][0]['sizes']['large']['w']
+                imagem.height = raw_imagem['entities']['media'][0]['sizes']['large']['h']
+                imagem.date_posted = imagem.timestamp(datetime.datetime.strptime(raw_imagem['created_at'], "%a %b %d %H:%M:%S +0000 %Y"))
+                imagem.original_url = raw_imagem['entities']['media'][0]['expanded_url']
+                pictures.append(imagem.dictit())
         return pictures
                 
 
@@ -105,7 +109,7 @@ class Instagram:
 class Flickr:
     def __init__(self, tag, api_key):
         self.name   = 'Flickr'
-        self.api_url = 'http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + api_key +'&text=' + tag +'&sort=&per_page=500&format=json&nojsoncallback=1&extras=owner_name,date_upload,url_t,url_l'
+        self.api_url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + api_key +'&text=' + tag +'&sort=&per_page=500&format=json&nojsoncallback=1&extras=owner_name,date_upload,url_t,url_l'
         self.tag = tag
         
     def getPictures(self):
@@ -182,13 +186,13 @@ class Youtube:
 def rockndroll():
     tag = 'love'
     #flickr = Flickr(tag, settings.config['flickr_apikey']).getPictures()
-    #twitter = Twitter(tag, settings.config['twitter_apikey']).getPictures()
+    twitter = Twitter(tag, settings.config['twitter_apikey'], settings.config['twitter_secret']).getPictures()
     #instagram = Instagram(tag, settings.config['instagram_apikey']).getPictures()
     picasa = Picasa(tag).getPictures()
     youtube = Youtube(tag).getVideos()
-    lista_de_fotos =  picasa + youtube
+    lista_de_fotos =  twitter + flickr + picasa + youtube
     lista_de_fotos = sorted(lista_de_fotos, key=itemgetter('date_posted'), reverse=True)
-    a = open(tag+'.json','w')
+    a = open('muro.json','w')
     a.write(json.dumps(lista_de_fotos))
     a.close()
 
