@@ -1,5 +1,7 @@
 config = {
     'flickr_apikey' : 'defina a chave',
     'twitter_apikey' : 'defina a chave',
-    'instagram_apikey' : 'defina a chave'
+    'twitter_secret' : 'defina o segredo'
+    'instagram_apikey' : 'defina a chave',
+    'tag' : 'defina a tag'
     }

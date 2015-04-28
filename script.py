@@ -4,6 +4,7 @@ from pprint import pprint
 from operator import itemgetter
 import settings
 
+# Hack to put script on current dir
 try:
     os.chdir(os.path.dirname(sys.argv[0]))
 except:
@@ -19,7 +20,9 @@ except:
 #        media_type:,
 #        media_provider:
 #       }
+
 class Media:
+    '''Generic class for handling media type'''
     def __init__(self):
         self.content = None
         self.thumb = None
@@ -48,6 +51,7 @@ class Media:
         return 1000 * time.mktime(dt.timetuple())
         
 class Twitter:
+    '''Remember to configure the Key and Secret'''
     def __init__(self, tag, api_key, api_secret):
         self.name   = 'Twitter'
         self.api_url = 'https://api.twitter.com/1.1/search/tweets.json?q=' + tag + ' filter:images&count=100&include_entities=true&result_type=recent'
@@ -80,6 +84,7 @@ class Twitter:
                 
 
 class Instagram:
+    '''Remember to configure the api'''
     def __init__(self, tag, api_key):
         self.name = 'Instagram'
         self.api_url = 'https://api.instagram.com/v1/tags/' + tag + '/media/recent?client_id=' + api_key
@@ -107,6 +112,7 @@ class Instagram:
         return pictures
 
 class Flickr:
+    '''Remember to configure the api'''
     def __init__(self, tag, api_key):
         self.name   = 'Flickr'
         self.api_url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + api_key +'&text=' + tag +'&sort=&per_page=500&format=json&nojsoncallback=1&extras=owner_name,date_upload,url_t,url_l'
@@ -179,7 +185,8 @@ class Youtube:
             video.height = raw_video['media$group']['media$thumbnail'][0]['height']
             video.date_posted = video.timestamp(datetime.datetime.strptime(raw_video['updated']['$t'], "%Y-%m-%dT%H:%M:%S.000Z"))
             video.original_url = raw_video['link'][0]['href']
-            videos.append(video.dictit())
+            if video.author != "YouTube Help":
+                videos.append(video.dictit())
         return videos
             
 

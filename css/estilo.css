@@ -67,7 +67,7 @@ strong {
 	width: 220px;
 	overflow: hidden;
 	padding: 10px;
-	color: #e7b900;
+	color: #e05;
 	font-size: .8em;
 	background-color: #fff;
 	border-top: 1px solid #fff;
@@ -95,7 +95,7 @@ header {
 
 a.reload {
 	width: 220px;
-	margin: 260px 0 0 0;
+	margin: 265px 0 0 0;
 	display: block;
 	font-size: .8em;
 	float: left;
@@ -106,7 +106,7 @@ a.reload {
 
 .item.info {
 	width: 720px;
-	background-color: #fc0;
+	background-color: #e05;
 	padding: 10px;
 	float: left;
 }
@@ -135,18 +135,20 @@ nav a {
 }
 
 aside#info h3 {
-	width: 50%;
+	width: 35%;
 	height: 64px;
 	float: right;
-	background: url(../img/info.png) top right no-repeat;
 	display: block;
-	text-indent: -9999px;
+	color:#fff;
+	font-size: 1.4em;
 }
-
+aside#info h3 span {
+	font-weight: bold;
+}
 a.more {
 	font-size: 2em;
 	padding: 50px 0;
-	background: #fc0;
+	background: #e05;
 	color: #fff;
 	text-transform: lowercase;
 	display: block;
@@ -157,4 +159,11 @@ a.more {
 
 a.more:hover {
 	background-color: #333;
+}
+
+footer {
+	background-color: #FFF;
+	text-align: center;
+	font-size: 0.7em;
+	padding:3px;
 }
