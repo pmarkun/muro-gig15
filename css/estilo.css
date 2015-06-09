@@ -93,7 +93,7 @@ header {
 	margin: -20px 0 0 0;
 }
 
-a.reload {
+a.reload, a.export {
 	width: 220px;
 	margin: 265px 0 0 0;
 	display: block;
@@ -166,4 +166,8 @@ footer {
 	text-align: center;
 	font-size: 0.7em;
 	padding:3px;
+}
+
+button.admin {
+	float:right;
 }

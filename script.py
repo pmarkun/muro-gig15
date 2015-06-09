@@ -67,7 +67,10 @@ class Twitter:
         client = twitter.AppClient(self.api_key, self.secret, self.access_token)
         pictures = []
         soap = client.make_api_call('GET', self.api_url).json()
-        for raw_imagem in soap['statuses']:
+	b = open('twitter.json', 'w')
+	b.write(json.dumps(soap, indent=4))
+	b.close()        
+	for raw_imagem in soap['statuses']:
             if raw_imagem.has_key('entities') and raw_imagem['entities'].has_key('media'):    
                 imagem = Media()
                 imagem.media_type = 'image'
@@ -197,7 +200,8 @@ def rockndroll():
     instagram = Instagram(tag, settings.config['instagram_apikey']).getPictures()
     picasa = Picasa(tag).getPictures()
     youtube = Youtube(tag).getVideos()
-    lista_de_fotos =  instagram +  flickr + picasa + youtube
+    lista_de_fotos =  instagram +  flickr + picasa + youtube + twitter
+    lista_de_fotos = [foto for foto in lista_de_fotos if foto['date_posted'] > 1429929349000.0]
     lista_de_fotos = sorted(lista_de_fotos, key=itemgetter('date_posted'), reverse=True)
     a = open('muro.json','w')
     a.write(json.dumps(lista_de_fotos))
